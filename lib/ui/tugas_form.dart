@@ -159,7 +159,6 @@ class _TugasFormState extends State<TugasForm> {
       _isLoading = true;
     });
     Tugas updateTugas = Tugas(id: null);
-    updateTugas.id = widget.tugas!.id;
     updateTugas.titleTugas = _titleTugasTextboxController.text;
     updateTugas.deskTugas = _deskTugasTextboxController.text;
     updateTugas.deadlineTugas = int.parse(_deadlineTugasTextboxController.text);
