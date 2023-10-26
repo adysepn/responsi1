@@ -10,7 +10,7 @@ class TugasBloc {
     var response = await Api().get(apiUrl);
     var jsonObj = json.decode(response.body);
 
-    List<dynamic> listTugas = (jsonObj as Map<String, dynamic>)['data'];
+    List<dynamic> listTugas = (jsonObj as Map<String, dynamic>)['result'];
 
     List<Tugas> tugass = [];
     for (int i = 0; i < listTugas.length; i++) {
@@ -23,9 +23,9 @@ class TugasBloc {
     String apiUrl = ApiUrl.createTugas;
 
     var body = {
-      "title_tugas": tugas!.titleTugas,
-      "deskripsi_tugas": tugas.deskTugas,
-      "deadline": tugas.deadlineTugas.toString()
+      "title": tugas!.titleTugas,
+      "desk": tugas.deskTugas,
+      "deadline": tugas.deadlineTugas
     };
 
     var response = await Api().post(apiUrl, body);
@@ -38,22 +38,25 @@ class TugasBloc {
     String apiUrl = ApiUrl.updateTugas(tugas.id!);
 
     var body = {
-      "title_tugas": tugas.titleTugas,
-      "deskripsi_tugas": tugas.deskTugas,
-      "deadline": tugas.deadlineTugas.toString()
+      "title": tugas.titleTugas,
+      "deskripsi": tugas.deskTugas,
+      "deadline": tugas.deadlineTugas
     };
+    print("Body : $body");
     var response = await Api().post(apiUrl, body);
     var jsonObj = json.decode(response.body);
-    // print("json : $jsonObj");
-    return jsonObj['status'];
+    if (jsonObj['status'] == 'success') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   static Future<bool> deleteTugas({int? id}) async {
     String apiUrl = ApiUrl.deleteTugas(id!);
 
     var response = await Api().delete(apiUrl);
-
     var jsonObj = json.decode(response.body);
-    return (jsonObj as Map<String, dynamic>)['data'];
+    return (jsonObj as Map<String, dynamic>)['result'];
   }
 }

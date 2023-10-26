@@ -6,12 +6,13 @@ import 'package:tokokita/helpers/app_exeptions.dart';
 class Api {
   Future<dynamic> post(dynamic url, dynamic data) async {
     var token = await UserInfo().getToken();
-    dynamic responseJson;
-
+    var responseJson;
     try {
-      final response = await http.post(Uri.parse(url),
-          body: data,
-          headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+      final response = await http.post(Uri.parse(url), body: data, headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+        // Sesuaikan header dengan API yang diberikan
+        // Contoh: "Content-Type": "application/json"
+      });
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -23,8 +24,10 @@ class Api {
     var token = await UserInfo().getToken();
     var responseJson;
     try {
-      final response = await http.get(Uri.parse(url),
-          headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+      final response = await http.get(Uri.parse(url), headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+        // Sesuaikan header dengan API yang diberikan
+      });
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -36,8 +39,10 @@ class Api {
     var token = await UserInfo().getToken();
     var responseJson;
     try {
-      final response = await http.delete(Uri.parse(url),
-          headers: {HttpHeaders.authorizationHeader: "Bearer  $token"});
+      final response = await http.post(Uri.parse(url), headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+        // Sesuaikan header dengan API yang diberikan
+      });
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -51,7 +56,6 @@ class Api {
         return response;
       case 400:
         throw BadRequestException(response.body.toString());
-
       case 401:
       case 403:
         throw UnauthorisedException(response.body.toString());

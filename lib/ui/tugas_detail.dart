@@ -17,7 +17,7 @@ class _TugasDetailState extends State<TugasDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Tugas Ady'),
+        title: const Text('Detail Tugas'),
       ),
       body: Center(
         child: Column(

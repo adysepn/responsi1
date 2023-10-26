@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tokokita/bloc/tugas_bloc.dart';
-import 'package:tokokita/ui/tugas_page.dart';
 import 'package:tokokita/model/tugas.dart';
+import 'package:tokokita/ui/tugas_page.dart';
 import 'package:tokokita/widget/warning_dialog.dart';
 
 class TugasForm extends StatefulWidget {
@@ -14,12 +14,13 @@ class TugasForm extends StatefulWidget {
 class _TugasFormState extends State<TugasForm> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  String judul = "TAMBAH TUGAS";
+  String title = "TAMBAH Tugas";
   String tombolSubmit = "SIMPAN";
 
   final _titleTugasTextboxController = TextEditingController();
   final _deskTugasTextboxController = TextEditingController();
   final _deadlineTugasTextboxController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +30,7 @@ class _TugasFormState extends State<TugasForm> {
   isUpdate() {
     if (widget.tugas != null) {
       setState(() {
-        judul = "UBAH Tugas ADY";
+        title = "UBAH Tugas ";
         tombolSubmit = "UBAH";
         _titleTugasTextboxController.text = widget.tugas!.titleTugas!;
         _deskTugasTextboxController.text = widget.tugas!.deskTugas!;
@@ -37,7 +38,7 @@ class _TugasFormState extends State<TugasForm> {
             widget.tugas!.deadlineTugas.toString();
       });
     } else {
-      judul = "TAMBAH Tugas ADY";
+      title = "TAMBAH Tugas ";
       tombolSubmit = "SIMPAN";
     }
   }
@@ -45,7 +46,7 @@ class _TugasFormState extends State<TugasForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(judul)),
+      appBar: AppBar(title: Text(title)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -65,52 +66,48 @@ class _TugasFormState extends State<TugasForm> {
     );
   }
 
-//Membuat Textbox title Tugas
   Widget _titleTugasTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "title Tugas"),
+      decoration: const InputDecoration(labelText: "Nama Tugas"),
       keyboardType: TextInputType.text,
       controller: _titleTugasTextboxController,
       validator: (value) {
         if (value!.isEmpty) {
-          return "title Tugas harus diisi";
+          return "Nama Tugas harus diisi";
         }
         return null;
       },
     );
   }
 
-//Membuat Textbox desk Tugas
   Widget _deskTugasTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "desk Tugas"),
-      keyboardType: TextInputType.text,
+      decoration: const InputDecoration(labelText: "Deskripsi"),
+      keyboardType: TextInputType.number,
       controller: _deskTugasTextboxController,
       validator: (value) {
         if (value!.isEmpty) {
-          return "desk Tugas harus diisi";
+          return "Deskripsi harus diisi";
         }
         return null;
       },
     );
   }
 
-//Membuat Textbox deadline Tugas
   Widget _deadlineTugasTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "deadline"),
+      decoration: const InputDecoration(labelText: "Deadline"),
       keyboardType: TextInputType.number,
       controller: _deadlineTugasTextboxController,
       validator: (value) {
         if (value!.isEmpty) {
-          return "deadline harus diisi";
+          return "Deadline tugas";
         }
         return null;
       },
     );
   }
 
-//Membuat Tombol Simpan/Ubah
   Widget _buttonSubmit() {
     return OutlinedButton(
         child: Text(tombolSubmit),
@@ -119,10 +116,9 @@ class _TugasFormState extends State<TugasForm> {
           if (validate) {
             if (!_isLoading) {
               if (widget.tugas != null) {
-                //kondisi update Tugas
                 ubah();
               } else {
-                //kondisi tambah Tugas
+                //kondisi tambah tugas
                 simpan();
               }
             }
@@ -137,8 +133,7 @@ class _TugasFormState extends State<TugasForm> {
     Tugas createTugas = Tugas(id: null);
     createTugas.titleTugas = _titleTugasTextboxController.text;
     createTugas.deskTugas = _deskTugasTextboxController.text;
-
-    createTugas.deadlineTugas = int.parse(_deadlineTugasTextboxController.text);
+    createTugas.deadlineTugas = _deadlineTugasTextboxController.text;
     TugasBloc.addTugas(tugas: createTugas).then((value) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => const TugasPage()));
@@ -158,10 +153,10 @@ class _TugasFormState extends State<TugasForm> {
     setState(() {
       _isLoading = true;
     });
-    Tugas updateTugas = Tugas(id: null);
+    Tugas updateTugas = Tugas(id: widget.tugas!.id);
     updateTugas.titleTugas = _titleTugasTextboxController.text;
     updateTugas.deskTugas = _deskTugasTextboxController.text;
-    updateTugas.deadlineTugas = int.parse(_deadlineTugasTextboxController.text);
+    updateTugas.deadlineTugas = _deadlineTugasTextboxController.text;
     TugasBloc.updateTugas(tugas: updateTugas).then((value) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => const TugasPage()));
